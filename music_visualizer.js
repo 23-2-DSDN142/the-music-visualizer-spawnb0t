@@ -40,7 +40,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
   for(let i=0; i<backgroundGradient; i++){
     let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
-    let strokeColor = lerpColor(pink, purple, gradientAmount)
+    let strokeColor = lerpColor(purple, pink, gradientAmount)
 
     stroke(strokeColor)
     line(0, 100+i-100, width, 100+i-100)
@@ -62,7 +62,7 @@ let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based 
 for(let i=1; i<drumMap; i++){
 let lineStep = i*8 - 5;
 let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
-let LinesStrokeColor = lerpColor(red, yellow, gradientAmount) 
+let LinesStrokeColor = lerpColor(purple, pink, gradientAmount) 
 stroke(LinesStrokeColor)
 line(lineStart, lineStep, lineEnd, lineStep)
 }
@@ -74,25 +74,62 @@ pop()
 
 for(let i=0; i<backgroundGradient; i++){
   let gradientAmount = map(i, 0, backgroundGradient, 0,1)
-  let SunStrokeColor = lerpColor(yellow, purple, gradientAmount)
+  let SunStrokeColor = lerpColor(red, yellow, gradientAmount)
 
   stroke(SunStrokeColor)
-  ellipse(width/2, height/4, i/4)
+  ellipse(width/2, height/4+75, i/4)
 }
 
 
 
 
 
+//draw horizon 
+stroke(0);
+fill(180);
+beginShape();
+vertex(0, height);
+vertex(0, height/2-90);
+vertex(width/2-40, height/2-65);
+vertex(width/2+40, height/2-65);
+vertex(width, height/2-90);
+vertex(width, height);
+endShape();
+
+//draw road
+// stroke(0);
+// fill(100);
+// beginShape();
+// vertex(width/2-40, height/2-65);
+// vertex(width/2+40, height/2-65);
+// vertex(width/2+380, height);
+// vertex(width/2-380, height);
+// vertex(width/2-40, height/2-65);
+// endShape()
+stroke(0);
+fill(100);
+beginShape();
+vertex(width/2-40, height/2-65);
+vertex(width/2+40, height/2-65);
+vertex(width, height/2+210);
+vertex(width, height);
+vertex(0, height);
+vertex(0, height/2+210)
+vertex(width/2-40, height/2-65);
+endShape()
+ 
+// stroke(255);
+// strokeWeight(5);
+// line(width/2, height, width/2, height/2-62)
+
 
 
 
  // display "words"
+ stroke(255);
  textAlign(CENTER);
  textSize(other);
  text(words, width/2, height/3);  
-
-
 
 
 
