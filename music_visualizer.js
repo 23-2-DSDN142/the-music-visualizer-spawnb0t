@@ -97,30 +97,36 @@ vertex(width, height);
 endShape();
 
 //draw road
-// stroke(0);
-// fill(100);
-// beginShape();
+stroke(0);
+fill(100);
+beginShape();
 // vertex(width/2-40, height/2-65);
 // vertex(width/2+40, height/2-65);
 // vertex(width/2+380, height);
 // vertex(width/2-380, height);
 // vertex(width/2-40, height/2-65);
-// endShape()
-stroke(0);
-fill(100);
-beginShape();
+
+// vertex(width/2-40, height/2-65);
+// vertex(width/2+40, height/2-65);
+// vertex(width, height/2+210);
+// vertex(width, height);
+// vertex(0, height);
+// vertex(0, height/2+210)
+// vertex(width/2-40, height/2-65);
+
 vertex(width/2-40, height/2-65);
 vertex(width/2+40, height/2-65);
-vertex(width, height/2+210);
+vertex(width, height/2+50);
 vertex(width, height);
 vertex(0, height);
 vertex(0, height/2+210)
 vertex(width/2-40, height/2-65);
+
 endShape()
  
-// stroke(255);
-// strokeWeight(5);
-// line(width/2, height, width/2, height/2-62)
+stroke(255);
+strokeWeight(2);
+line(width/2+500, height, width/2, height/2-65)
 
 
 
