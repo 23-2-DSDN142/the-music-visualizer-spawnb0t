@@ -11,14 +11,23 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   if(firstRun){
     rectMode(CENTER);
     carFrameImg = loadImage('assets/CarFrame.png');
-    buildingsLayer1Img = loadImage('assets/buildingsLayer1.png');
-    buildingsLayer2Img = loadImage('assets/buildingsLayer2.png');
-    buildingsLayer3Img = loadImage('assets/buildingsLayer3.png');
+    buildingsFrontImg = loadImage('assets/buildingsFront.png');
+    buildingsBehindImg = loadImage('assets/buildingsBehind.png');
     moonImg = loadImage('assets/moon.png');
-
+    heartImg = loadImage('assets/heart.png');
+    heartMainImg = loadImage('assets/heartMain.png');
+    heartBackImg = loadImage('assets/heartBack.png');
+    mountainsImg = loadImage('assets/mountains.png');
+    mountainsFrontImg = loadImage('assets/mountainsFront.png');
+    mountainsBehindImg = loadImage('assets/mountainsBehind.png');
+    cityImg = loadImage('assets/city.png');
+    
+  
     firstRun = false
   }
   console.log(counter);
+  console.log(song.duration())
+  //let slowIncr = map(song.currentTime(), 0, song.duration(), 0, 2300);
 
   background(255)
   textFont('Helvetica'); // CSS safe fonts
@@ -40,17 +49,6 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let SunStrokeColor = lerpColor(pink, purple, 0)
 
 
-//draw building layer behind sun
-// buildingsLayer1Img.resize(1080, 220)
-// image(buildingsLayer1Img, 0, 80);
-
-//draw trial buildings for background
-// trialBuildingsImg.resize(1080, 320)
-// image(trialBuildingsImg, 0, 190);
-
-//draw building layers
-// buildingsLayer2Img.resize(1080, 220)
-// image(buildingsLayer2Img, 0, 200);
 
 
 
@@ -102,6 +100,11 @@ pop()
 
 
 
+//draw building layer behind sun
+buildingsBehindImg.resize(1080, 220)
+image(buildingsBehindImg, 0, 80);
+
+
 //sun
 for(let i=0; i<backgroundGradient; i++){
   let gradientAmount = map(i, 0, backgroundGradient, 0,1)
@@ -111,10 +114,6 @@ for(let i=0; i<backgroundGradient; i++){
   ellipse(width/2, height/4+75, i/4)
 }
 
-
-// //moon
-// moonImg.resize(250, 250)
-// image(moonImg, width/2-125, 130);
 
 
 //draw horizon 
@@ -150,8 +149,14 @@ line(width/2+500, height, width/2, height/2-65)
 
 
 
+// //draw building layers
+// buildingsFrontImg.resize(1080, 300)
+// image(buildingsFrontImg, 0, 80);
 
 
+//trailling being inside city
+cityImg.resize(500, 550)
+image(cityImg, 0, 20);
 
  // display "words"
  stroke(255);
@@ -237,16 +242,10 @@ line(lineStart, lineStep, lineEnd, lineStep)
 }
 pop()
 
+//mountains
+mountainsBehindImg.resize(1080, 250)
+image(mountainsBehindImg, 0, 50);
 
-
-//sun
-// for(let i=0; i<backgroundGradient; i++){
-//   let gradientAmount = map(i, 0, backgroundGradient, 0,1)
-//   let SunStrokeColor = lerpColor(red, yellow, gradientAmount)
-
-//   stroke(SunStrokeColor)
-//   ellipse(width/2, height/4+75, i/4)
-// }
 
 
 //moon
@@ -296,7 +295,9 @@ line(width/2+500, height, width/2, height/2-65)
  textSize(other);
  text(words, width/2, height/3);  
 
-
+//mountains
+mountainsFrontImg.resize(1080, 350)
+image(mountainsFrontImg, 0, 12);
 
  //car frame
 carFrameImg.resize(1080, 720)
@@ -332,6 +333,9 @@ pop();
 else{
   
 background(0)
+
+//heart
+image(heartImg, 420, 100);
 
 }
 
