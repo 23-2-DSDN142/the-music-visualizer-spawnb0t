@@ -27,19 +27,19 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     sunRImg = loadImage('assets/sunR.png');
 
     //road line variables
-    lineOffsetX = (4.7*1);
-    lineOffsetY = (4*1); 
+    lineOffsetX = (4.7*0.8);
+    lineOffsetY = (4*0.8); 
       //lineOffsetX & Y control the speed of the road lines and therefore illusion of car speed
     lineStartX = (width/2);
     lineStartY = (height/2-65);
-    line2StartX = (lineStartX +lineOffsetX*21);
-    line2StartY = (lineStartY +lineOffsetY*21);
-    line3StartX = (line2StartX +lineOffsetX*21);
-    line3StartY = (line2StartY +lineOffsetY*21);
-    line4StartX = (line3StartX +lineOffsetX*21);
-    line4StartY = (line3StartY +lineOffsetY*21);
-    line5StartX = (line4StartX +lineOffsetX*21);
-    line5StartY = (line4StartY +lineOffsetY*21);
+    line2StartX = (lineStartX +lineOffsetX*25);
+    line2StartY = (lineStartY +lineOffsetY*25);
+    line3StartX = (line2StartX +lineOffsetX*25);
+    line3StartY = (line2StartY +lineOffsetY*25);
+    line4StartX = (line3StartX +lineOffsetX*25);
+    line4StartY = (line3StartY +lineOffsetY*25);
+    line5StartX = (line4StartX +lineOffsetX*25);
+    line5StartY = (line4StartY +lineOffsetY*25);
   
   
   
@@ -70,32 +70,29 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   strokeWeight(3)
   let backgroundGradient = 1000
 
-  //counter variables for timing 
+  //song.currentTime() variables for timing 
   let start = 0;
-  let foreshadow = 130;   //retro city
-  let verse1 = 240;   //daytime city
-  let chorus1Tear= 1230;  //sun tearing 
-  let chorus1= 1330;   //retro city & heart
-  let verse2 = 2050;   //daytime city
-  let chorus2Tear = 2935;  //sun tearing
-  let chorus2 = 3005;    // retro city & heart
-  let bridge = 4450;    //night moonscape
-
-  let chorus3Tear = 7760;   //sun tear
-  let chorus3 = 7820;   //electronic - orange/black moon
+  let foreshadow = 2.25;   //retro city
+  let verse1 = 4;   //daytime city
+  let chorus1Tear= 21.2;  //sun tearing 
+  let chorus1= 22.2;   //retro city & heart
+  let verse2 = 34.36;   //daytime city
+  let chorus2Tear = 49.2;  //sun tearing
+  let chorus2 = 50.3;    // retro city & heart
+  let bridge = 74.3;    //night moonscape
+  let chorus3 = 130.2;   //electronic - orange/black moon
   let outro = 166;   // moonscape
   
   
 
 
-//
-//
-//if statement controlling what is shown in each part of the song chronologically according to counter variable
+
+//if statement controlling what is shown in each part of the song chronologically according to song.currentTime() variables
 push()
 //daytime city
-if((counter >= start && counter <= foreshadow) || 
-(counter >=verse1+1 && counter <=chorus1) || 
-(counter >=verse2+1 && counter <=chorus2)){
+if((song.currentTime() >=start && song.currentTime() <= foreshadow) || 
+(song.currentTime() >verse1 && song.currentTime() <=chorus1) || 
+(song.currentTime() >verse2 && song.currentTime() <=chorus2)){
   //gradient background
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midBlueYellow = lerpColor(blue, yellow, 1) //make 0.85 midPPLerp so it visualises vocals
@@ -113,7 +110,7 @@ if((counter >= start && counter <= foreshadow) ||
 push()
 
 let drumMap = map(drum, 0, 100, 0, 90)
-let lineLength = 1080
+let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
@@ -132,19 +129,8 @@ pop()
 
 
 //draw building layer behind sun
-buildingsBehindImg.resize(1080, 220)
+buildingsBehindImg.resize(1280, 220)
 image(buildingsBehindImg, 0, 80);
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -154,23 +140,23 @@ image(buildingsBehindImg, 0, 80);
 
  //sun
  push()
-  if ((counter >= chorus1Tear+1 && counter <= chorus1) ||
-  (counter >= chorus2Tear+1 && counter <=chorus2)){
+  if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1) ||
+  (song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
 
     push()
     sunLImg.resize(282, 210)
-    image(sunLImg, 405, 115);
+    image(sunLImg, 505, 115);
     pop()
 
     sunRImg.resize(282,210)
-    image(sunRImg, 405, 115);
+    image(sunRImg, 505, 115);
   
   }
 
 
 
-  else if((counter >= chorus1+1 && counter <= verse2) ||
-  (counter >= chorus2+1)){
+  else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+  (song.currentTime() > chorus2)){
   }
 
 
@@ -255,13 +241,13 @@ stroke(183);
 stroke(0);
 fill(100);
 beginShape();
-vertex(width/2-40, height/2-65);
-vertex(width/2+40, height/2-65);
+vertex(width/2-60, height/2-65);
+vertex(width/2+60, height/2-65);
 vertex(width, height/2+50);
 vertex(width, height);
 vertex(0, height);
 vertex(0, height/2+210)
-vertex(width/2-40, height/2-65);
+vertex(width/2-60, height/2-65);
 endShape()
  
 stroke(255);
@@ -270,6 +256,93 @@ strokeWeight(2);
 
 
 
+//road lines
+stroke(255);
+push()
+let roadLineWeightSize = map(lineStartX, width/2, width/2+500, 0.2, 20)
+strokeWeight(roadLineWeightSize)
+
+line(lineStartX, lineStartY, lineStartX+lineOffsetX*2, lineStartY+lineOffsetY*2);
+
+lineStartX = lineStartX + lineOffsetX
+lineStartY = lineStartY + lineOffsetY
+
+if(lineStartX > width/2+500){
+lineStartX = width/2
+}
+
+if(lineStartY > height){
+  lineStartY = height/2-65
+  }
+
+
+//line 2
+let roadLine2WeightSize = map(line2StartX, width/2, width/2+500, 0.2, 20)
+strokeWeight(roadLine2WeightSize)
+  line(line2StartX, line2StartY, line2StartX+lineOffsetX*2, line2StartY+lineOffsetY*2);
+
+  line2StartX = line2StartX + lineOffsetX
+  line2StartY = line2StartY + lineOffsetY
+  
+  if(line2StartX > width/2+500){
+  line2StartX = width/2
+  }
+  
+  if(line2StartY > height){
+    line2StartY = height/2-65
+    }
+
+
+    //line 3
+  let roadLine3WeightSize = map(line3StartX, width/2, width/2+500, 0.2, 20)
+  strokeWeight(roadLine3WeightSize)
+  line(line3StartX, line3StartY, line3StartX+lineOffsetX*2, line3StartY+lineOffsetY*2);
+
+  line3StartX = line3StartX + lineOffsetX
+  line3StartY = line3StartY + lineOffsetY
+  
+  if(line3StartX > width/2+500){
+  line3StartX = width/2
+  }
+  
+  if(line3StartY > height){
+    line3StartY = height/2-65
+    }
+
+
+    //line 4
+    let roadLine4WeightSize = map(line4StartX, width/2, width/2+500, 0.2, 20)
+    strokeWeight(roadLine4WeightSize)
+    line(line4StartX, line4StartY, line4StartX+lineOffsetX*2, line4StartY+lineOffsetY*2);
+  
+    line4StartX = line4StartX + lineOffsetX
+    line4StartY = line4StartY + lineOffsetY
+    
+    if(line4StartX > width/2+500){
+    line4StartX = width/2
+    }
+    
+    if(line4StartY > height){
+      line4StartY = height/2-65
+      }
+
+
+    //line 5
+  let roadLine5WeightSize = map(line5StartX, width/2, width/2+500, 0.2, 20)
+  strokeWeight(roadLine5WeightSize)
+  line(line5StartX, line5StartY, line5StartX+lineOffsetX*2, line5StartY+lineOffsetY*2);
+
+  line5StartX = line5StartX + lineOffsetX
+  line5StartY = line5StartY + lineOffsetY
+  
+  if(line5StartX > width/2+500){
+  line5StartX = width/2
+  }
+  
+  if(line5StartY > height){
+    line5StartY = height/2-65
+    }
+  pop()
 
 
 
@@ -288,10 +361,10 @@ strokeWeight(2);
 
 //
 //retro city
-if((counter >= foreshadow+1 && counter <=verse1) || 
-(counter >= chorus1+1 && counter <= verse2) || 
-(counter >=chorus2+1 && counter <=bridge) ||
-(counter >= chorus3+1 && song.currentTime() <= outro)){
+if((song.currentTime() > foreshadow && song.currentTime() <=verse1) || 
+(song.currentTime() > chorus1 && song.currentTime() <= verse2) || 
+(song.currentTime() >chorus2 && song.currentTime() <=bridge) ||
+(song.currentTime() > chorus3 && song.currentTime() <= outro)){
   //gradient background
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
@@ -313,7 +386,7 @@ if((counter >= foreshadow+1 && counter <=verse1) ||
 push()
 
 let drumMap = map(drum, 0, 100, 0, 90)
-let lineLength = 1080
+let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
@@ -332,7 +405,7 @@ pop()
 
 
 //draw building layer behind sun
-buildingsBehindImg.resize(1080, 220)
+buildingsBehindImg.resize(1280, 220)
 image(buildingsBehindImg, 0, 80);
 
 
@@ -353,23 +426,23 @@ image(buildingsBehindImg, 0, 80);
 
  //sun
  push()
-  if ((counter >= chorus1Tear+1 && counter <= chorus1) ||
-  (counter >= chorus2Tear+1 && counter <=chorus2)){
+  if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1) ||
+  (song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
 
     push()
     sunLImg.resize(282, 210)
-    image(sunLImg, 405, 115);
+    image(sunLImg, 505, 115);
     pop()
 
     sunRImg.resize(282,210)
-    image(sunRImg, 405, 115);
+    image(sunRImg, 505, 115);
   
   }
 
 
 
-  else if((counter >= chorus1+1 && counter <= verse2) ||
-  (counter >= chorus2+1)){
+  else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+  (song.currentTime() > chorus2)){
   }
 
 
@@ -413,7 +486,7 @@ endShape();
   //horizontal 
   push()
   stroke(21, 87, 159);
-  strokeWeight(3);
+  strokeWeight(2);
   //left side
   line(0, height/2-60, width/2, height/2-35)
   line(0, height/2-20, width/2, height/2+5)
@@ -433,7 +506,7 @@ endShape();
   let Py = height/2-65
 
   stroke(21, 87, 159);
-  strokeWeight(4);
+  strokeWeight(2);
   //left side
   line(85, Py-21, 0, height/2-40)
   line(150, Py-15, 0, height/2+20)
@@ -459,21 +532,111 @@ endShape();
 stroke(0);
 fill(30);
 beginShape();
-vertex(width/2-40, height/2-65);
-vertex(width/2+40, height/2-65);
+vertex(width/2-60, height/2-65);
+vertex(width/2+60, height/2-65);
 vertex(width, height/2+50);
 vertex(width, height);
 vertex(0, height);
 vertex(0, height/2+210)
-vertex(width/2-40, height/2-65);
+vertex(width/2-60, height/2-65);
 endShape()
+
+
+//road lines
+stroke(255);
+push()
+let roadLineWeightSize = map(lineStartX, width/2, width/2+500, 0.2, 20)
+strokeWeight(roadLineWeightSize)
+
+line(lineStartX, lineStartY, lineStartX+lineOffsetX*2, lineStartY+lineOffsetY*2);
+
+lineStartX = lineStartX + lineOffsetX
+lineStartY = lineStartY + lineOffsetY
+
+if(lineStartX > width/2+500){
+lineStartX = width/2
+}
+
+if(lineStartY > height){
+  lineStartY = height/2-65
+  }
+
+
+//line 2
+let roadLine2WeightSize = map(line2StartX, width/2, width/2+500, 0.2, 20)
+strokeWeight(roadLine2WeightSize)
+  line(line2StartX, line2StartY, line2StartX+lineOffsetX*2, line2StartY+lineOffsetY*2);
+
+  line2StartX = line2StartX + lineOffsetX
+  line2StartY = line2StartY + lineOffsetY
+  
+  if(line2StartX > width/2+500){
+  line2StartX = width/2
+  }
+  
+  if(line2StartY > height){
+    line2StartY = height/2-65
+    }
+
+
+    //line 3
+  let roadLine3WeightSize = map(line3StartX, width/2, width/2+500, 0.2, 20)
+  strokeWeight(roadLine3WeightSize)
+  line(line3StartX, line3StartY, line3StartX+lineOffsetX*2, line3StartY+lineOffsetY*2);
+
+  line3StartX = line3StartX + lineOffsetX
+  line3StartY = line3StartY + lineOffsetY
+  
+  if(line3StartX > width/2+500){
+  line3StartX = width/2
+  }
+  
+  if(line3StartY > height){
+    line3StartY = height/2-65
+    }
+
+
+    //line 4
+    let roadLine4WeightSize = map(line4StartX, width/2, width/2+500, 0.2, 20)
+    strokeWeight(roadLine4WeightSize)
+    line(line4StartX, line4StartY, line4StartX+lineOffsetX*2, line4StartY+lineOffsetY*2);
+  
+    line4StartX = line4StartX + lineOffsetX
+    line4StartY = line4StartY + lineOffsetY
+    
+    if(line4StartX > width/2+500){
+    line4StartX = width/2
+    }
+    
+    if(line4StartY > height){
+      line4StartY = height/2-65
+      }
+
+
+    //line 5
+  let roadLine5WeightSize = map(line5StartX, width/2, width/2+500, 0.2, 20)
+  strokeWeight(roadLine5WeightSize)
+  line(line5StartX, line5StartY, line5StartX+lineOffsetX*2, line5StartY+lineOffsetY*2);
+
+  line5StartX = line5StartX + lineOffsetX
+  line5StartY = line5StartY + lineOffsetY
+  
+  if(line5StartX > width/2+500){
+  line5StartX = width/2
+  }
+  
+  if(line5StartY > height){
+    line5StartY = height/2-65
+    }
+  pop()
+
 
 
 
 heartScale = map(drum, 0, 100, 1, 1.2);
 //heart
-if ((counter >= chorus1+1 && counter <= verse2) ||
-(counter >= chorus2+1)){
+if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+(song.currentTime() > chorus2)){
   
   push()
   heartBackImg.resize(220, 270)
@@ -503,7 +666,7 @@ if ((counter >= chorus1+1 && counter <= verse2) ||
 //
 //
 //moonscape bridge
-else if((counter >=bridge+1 && counter <=chorus3)){
+else if((song.currentTime() >bridge && song.currentTime() <=chorus3)){
   //gradient background
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
@@ -525,7 +688,7 @@ else if((counter >=bridge+1 && counter <=chorus3)){
 push()
 
 let drumMap = map(drum, 0, 100, 0, 90)
-let lineLength = 1080
+let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
@@ -567,189 +730,27 @@ endShape();
 
 
 
+//mountains
+mountainsFrontImg.resize(1350, 350)
+image(mountainsFrontImg, 0, 12);
 
 
 //draw road
 stroke(0);
 fill(100);
 beginShape();
-vertex(width/2-40, height/2-65);
-vertex(width/2+40, height/2-65);
+vertex(width/2+0, height/2-65);
+vertex(width/2+60, height/2-65);
 vertex(width, height/2+50);
 vertex(width, height);
 vertex(0, height);
 vertex(0, height/2+210)
-vertex(width/2-40, height/2-65);
+vertex(width/2-60, height/2-65);
 endShape()
  
-
-//mountains
-mountainsFrontImg.resize(1080, 350)
-image(mountainsFrontImg, 0, 12);
-
-
-}
-
-
-//
-//
-//moonscape outro
-else if((song.currentTime() >= outro)){
-  //gradient background
-  let midPPLerp = map(vocal, 0, 100, 0, 1)
-  let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
-
-  strokeWeight(3)
-  let backgroundGradient = 1000
-
-  for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
-    let strokeColor = lerpColor(navy, grey, gradientAmount)
-
-    stroke(strokeColor)
-    line(0, 100+i-100, width, 100+i-100)
-  }
-
-
-
-  //retrolines and colour changing with drum
-push()
-
-let drumMap = map(drum, 0, 100, 0, 90)
-let lineLength = 1080
-let lineStart = 0
-let lineEnd = lineStart+lineLength
-
-strokeWeight(7)
-let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
-
-for(let i=1; i<drumMap; i++){
-let lineStep = i*8 - 5;
-let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
-let LinesStrokeColor = lerpColor(navy, grey, gradientAmount) 
-stroke(LinesStrokeColor)
-line(lineStart, lineStep, lineEnd, lineStep)
-}
-pop()
-
-//mountains
-mountainsBehindImg.resize(1080, 250)
-image(mountainsBehindImg, 0, 50);
-
-
-
-//draw horizon 
-stroke(0);
-fill(180);
-beginShape();
-vertex(0, height);
-vertex(0, height/2-90);
-vertex(width/2-40, height/2-65);
-vertex(width/2+40, height/2-65);
-vertex(width, height/2-90);
-vertex(width, height);
-endShape();
-
-
-
-//draw road
-stroke(0);
-fill(100);
-beginShape();
-vertex(width/2-40, height/2-65);
-vertex(width/2+40, height/2-65);
-vertex(width, height/2+50);
-vertex(width, height);
-vertex(0, height);
-vertex(0, height/2+210)
-vertex(width/2-40, height/2-65);
-endShape()
- 
-
-//mountains
-mountainsFrontImg.resize(1080, 350)
-image(mountainsFrontImg, 0, 12);
-  
-
-heartScale = map(drum, 0, 100, 1, 1.2);
-//heart
-if ((counter >= outro)){
-  
-  push()
-  heartBackImg.resize(220, 270)
-  heartMainImg.resize(220, 270)
-  pop()
-
-  image(heartBackImg, 440*heartScale, 100*heartScale)
-  image(heartMainImg, 440*heartScale, 100*heartScale)
-
-  }
-
-}
-
-pop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//drawing constant car elements 
-
-// display "words"
-stroke(255);
-textAlign(CENTER);
-textSize(other);
-text(words, width/2, height/3);  
-
-
-
-
-
-
 
 //road lines
+stroke(255);
 push()
 let roadLineWeightSize = map(lineStartX, width/2, width/2+500, 0.2, 20)
 strokeWeight(roadLineWeightSize)
@@ -841,18 +842,253 @@ strokeWeight(roadLine2WeightSize)
 
 
 
+}
+
+
+//
+//
+//moonscape outro
+else if((song.currentTime() > outro)){
+  //gradient background
+  let midPPLerp = map(vocal, 0, 100, 0, 1)
+  let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
+
+  strokeWeight(3)
+  let backgroundGradient = 1000
+
+  for(let i=0; i<backgroundGradient; i++){
+    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
+    let strokeColor = lerpColor(navy, grey, gradientAmount)
+
+    stroke(strokeColor)
+    line(0, 100+i-100, width, 100+i-100)
+  }
+
+
+
+  //retrolines and colour changing with drum
+push()
+
+let drumMap = map(drum, 0, 100, 0, 90)
+let lineLength = width
+let lineStart = 0
+let lineEnd = lineStart+lineLength
+
+strokeWeight(7)
+let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
+
+for(let i=1; i<drumMap; i++){
+let lineStep = i*8 - 5;
+let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
+let LinesStrokeColor = lerpColor(navy, grey, gradientAmount) 
+stroke(LinesStrokeColor)
+line(lineStart, lineStep, lineEnd, lineStep)
+}
+pop()
+
+//mountains
+mountainsBehindImg.resize(1080, 250)
+image(mountainsBehindImg, 0, 50);
+
+
+
+//draw horizon 
+stroke(0);
+fill(180);
+beginShape();
+vertex(0, height);
+vertex(0, height/2-90);
+vertex(width/2-40, height/2-65);
+vertex(width/2+40, height/2-65);
+vertex(width, height/2-90);
+vertex(width, height);
+endShape();
+
+//mountains
+mountainsFrontImg.resize(1380, 350)
+image(mountainsFrontImg, 0, 12);
+
+//draw road
+stroke(0);
+fill(100);
+beginShape();
+vertex(width/2-60, height/2-65);
+vertex(width/2+60, height/2-65);
+vertex(width, height/2+50);
+vertex(width, height);
+vertex(0, height);
+vertex(0, height/2+210)
+vertex(width/2-60, height/2-65);
+endShape()
+ 
+
+//road lines
+stroke(255);
+push()
+let roadLineWeightSize = map(lineStartX, width/2, width/2+500, 0.2, 20)
+strokeWeight(roadLineWeightSize)
+
+line(lineStartX, lineStartY, lineStartX+lineOffsetX*2, lineStartY+lineOffsetY*2);
+
+lineStartX = lineStartX + lineOffsetX
+lineStartY = lineStartY + lineOffsetY
+
+if(lineStartX > width/2+500){
+lineStartX = width/2
+}
+
+if(lineStartY > height){
+  lineStartY = height/2-65
+  }
+
+
+//line 2
+let roadLine2WeightSize = map(line2StartX, width/2, width/2+500, 0.2, 20)
+strokeWeight(roadLine2WeightSize)
+  line(line2StartX, line2StartY, line2StartX+lineOffsetX*2, line2StartY+lineOffsetY*2);
+
+  line2StartX = line2StartX + lineOffsetX
+  line2StartY = line2StartY + lineOffsetY
+  
+  if(line2StartX > width/2+500){
+  line2StartX = width/2
+  }
+  
+  if(line2StartY > height){
+    line2StartY = height/2-65
+    }
+
+
+    //line 3
+  let roadLine3WeightSize = map(line3StartX, width/2, width/2+500, 0.2, 20)
+  strokeWeight(roadLine3WeightSize)
+  line(line3StartX, line3StartY, line3StartX+lineOffsetX*2, line3StartY+lineOffsetY*2);
+
+  line3StartX = line3StartX + lineOffsetX
+  line3StartY = line3StartY + lineOffsetY
+  
+  if(line3StartX > width/2+500){
+  line3StartX = width/2
+  }
+  
+  if(line3StartY > height){
+    line3StartY = height/2-65
+    }
+
+
+    //line 4
+    let roadLine4WeightSize = map(line4StartX, width/2, width/2+500, 0.2, 20)
+    strokeWeight(roadLine4WeightSize)
+    line(line4StartX, line4StartY, line4StartX+lineOffsetX*2, line4StartY+lineOffsetY*2);
+  
+    line4StartX = line4StartX + lineOffsetX
+    line4StartY = line4StartY + lineOffsetY
+    
+    if(line4StartX > width/2+500){
+    line4StartX = width/2
+    }
+    
+    if(line4StartY > height){
+      line4StartY = height/2-65
+      }
+
+
+    //line 5
+  let roadLine5WeightSize = map(line5StartX, width/2, width/2+500, 0.2, 20)
+  strokeWeight(roadLine5WeightSize)
+  line(line5StartX, line5StartY, line5StartX+lineOffsetX*2, line5StartY+lineOffsetY*2);
+
+  line5StartX = line5StartX + lineOffsetX
+  line5StartY = line5StartY + lineOffsetY
+  
+  if(line5StartX > width/2+500){
+  line5StartX = width/2
+  }
+  
+  if(line5StartY > height){
+    line5StartY = height/2-65
+    }
+  pop()
+
+
+
+  
+
+heartScale = map(drum, 0, 100, 1, 1.2);
+//heart
+  
+  push()
+  heartBackImg.resize(220, 270)
+  heartMainImg.resize(220, 270)
+  pop()
+
+  image(heartBackImg, 440*heartScale, 100*heartScale)
+  image(heartMainImg, 440*heartScale, 100*heartScale)
+
+}
+
+pop()
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// display "words"
+// stroke(255);
+// textAlign(CENTER);
+// textSize(other);
+// text(words, width/2, height/3);  
+
+
+
+
+//
+//drawing constant car elements 
 
 //car frame
-carFrame2Img.resize(1122, 820)
+carFrame2Img.resize(1327, 820)
 image(carFrame2Img, -22, -10);
 
 //speedometer needle
 push()
-translate(375, 565)
+translate(455, 565)
 rotate(bass*3)
 needleImg.resize(25, 80)
 image(needleImg, 0, 0);
@@ -860,11 +1096,11 @@ pop()
 
 //wheel
 wheelImg.resize(500, 500)
-image(wheelImg, 125, 375);
+image(wheelImg, 195, 375);
 
 //Wave visualiser
 push();
-translate(685, 500);
+translate(815, 500);
 scale(0.22);
 
 noFill();
