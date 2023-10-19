@@ -1,10 +1,7 @@
-//1080x720
-//system_runner; change canvas size // vert or hor
+//1280x720
 //system_settings; debugFastRefresh to have countdown delay record 
 
 let firstRun = true
-let carFrameImg;
-
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
@@ -15,6 +12,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     wheelImg = loadImage('assets/wheel.png');
     buildingsFrontImg = loadImage('assets/buildingsFront.png');
     buildingsBehindImg = loadImage('assets/buildingsBehind.png');
+    moonImg = loadImage('assets/moon.png');
     marsImg = loadImage('assets/mars.png');
     heartImg = loadImage('assets/heart.png');
     heartMainImg = loadImage('assets/heartMain.png');
@@ -80,8 +78,11 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let verse2 = 34.4;   //daytime city
   let chorus2Tear = 49.2;  //sun tearing
   let chorus2 = 50.3;    // retro city & heart
+  let chorus2Untear = 73.3; // heart dissapearing
   let bridge = 74.3;    //night moonscape
-  let chorus3 = 129.6;   //electronic 
+  let chorus3 = 130;   //electronic 
+  let chorus3SwitchStart = 141.3; // heart incr
+  let chorus3Switch = 142.3;//planet switches to beating heart
   let outro = 166.5;   // moonscape
 
 
@@ -96,87 +97,43 @@ if((song.currentTime() >=start && song.currentTime() <= foreshadow) ||
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midBlueYellow = lerpColor(blue, yellow, 1) //make 0.85 midPPLerp so it visualises vocals
 
-  for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
-    let strokeColor = lerpColor(blue, yellow, gradientAmount)
-
+  
+    if((song.currentTime() <=foreshadow )){
+      for(let i=0; i<backgroundGradient; i++){
+        let gradientAmount = map(i, 0, backgroundGradient, 0, 50)
+        let strokeColor = lerpColor(blue, yellow, gradientAmount)
+    stroke(strokeColor)
+    line(0, 100+i-100, width, 100+i-100)
+  }}
+  else{
+    for(let i=0; i<backgroundGradient; i++){
+      let gradientAmount = map(i, 0, backgroundGradient, 0, 6)
+      let strokeColor = lerpColor(blue, yellow, gradientAmount)
     stroke(strokeColor)
     line(0, 100+i-100, width, 100+i-100)
   }
+  }
 
 
-  //retrolines and colour changing with drum
+  //retrolines and colour changing with other
 push()
 
-let drumMap = map(drum, 0, 100, 0, 90)
+let otherMap = map(other, 0, 100, 0, 90)
 let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
 strokeWeight(7)
-let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
+let OtherColorMap = map(other, 0, 100, 0,1) /// all one color, color change based on other volume
 
-for(let i=1; i<drumMap; i++){
+for(let i=1; i<otherMap; i++){
 let lineStep = i*8 - 5;
-let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
+let gradientAmount = map(i, 0, otherMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
 let LinesStrokeColor = lerpColor(blue, yellow, gradientAmount) 
 stroke(LinesStrokeColor)
 line(lineStart, lineStep, lineEnd, lineStep)
 }
 pop()
-
-
-
-//draw building layer behind sun
-buildingsBehindImg.resize(1280, 220)
-image(buildingsBehindImg, 0, 80);
-
-
-
-
-//heart entering by incr in size behind heart tearing 
-if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
-  
-  heartBackScale = map(drum, 0, 100, 1, 1.2);
-  heartMainScale = map(drum, 0, 100, 1, 1.5);
-  heartIncr1 = map(song.currentTime(), chorus1Tear, chorus1, 0, 1)
-  push()
-  imageMode(CENTER);
-  scale(heartIncr1);
-    push()
-    imageMode(CENTER);
-    push()
-    scale(heartBackScale*1.5);
-    image(heartBackImg, 405/heartBackScale/heartIncr1, 95/heartBackScale/heartIncr1)
-    pop()
-      push()
-    scale(heartMainScale*1.5);
-    image(heartMainImg, 425/heartMainScale/heartIncr1, 110/heartMainScale/heartIncr1)
-    pop()
-    pop()
-  pop()
-  }
-
-  else if((song.currentTime() > chorus2Tear && song.currentTime() <= chorus2)){
-  heartBackScale = map(drum, 0, 100, 1, 1.2);
-  heartMainScale = map(drum, 0, 100, 1, 1.5);
-  heartIncr2 = map(song.currentTime(), chorus2Tear, chorus2, 0, 1)
-  push()
-  imageMode(CENTER);
-  scale(heartIncr2);
-    push()
-    imageMode(CENTER);
-    push()
-    scale(heartBackScale*1.5);
-    image(heartBackImg, 405/heartBackScale/heartIncr2, 95/heartBackScale/heartIncr2)
-    pop()
-      push()
-    scale(heartMainScale*1.5);
-    image(heartMainImg, 425/heartMainScale/heartIncr2, 110/heartMainScale/heartIncr2)
-    pop()
-    pop()
-  pop()
-  }
 
  
 
@@ -264,13 +221,6 @@ if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
   }
   }
   pop()
-
-
-
-
-
-
-
   
 
 
@@ -289,7 +239,7 @@ endShape();
 
 
 //retro 80's infinite geometry lines
-stroke(183);
+stroke(185);
   strokeWeight(3);
   //horizontal 
   push()
@@ -439,9 +389,124 @@ strokeWeight(roadLine2WeightSize)
 
 
 
+  //heart entering by incr in size behind sun tearing 
+if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
   
+  heartBackScale = map(drum, 0, 100, 1, 1.2);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+  heartIncr1 = map(song.currentTime(), chorus1Tear, chorus1, 0, 1)
+  push()
+  imageMode(CENTER);
+  scale(heartIncr1);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 405/heartBackScale/heartIncr1, 95/heartBackScale/heartIncr1)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale/heartIncr1, 110/heartMainScale/heartIncr1)
+    pop()
+    pop()
+  pop()
+  }
+
+  else if((song.currentTime() > chorus2Tear && song.currentTime() <= chorus2)){
+  heartBackScale = map(drum, 0, 100, 1, 1.2);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+  heartIncr2 = map(song.currentTime(), chorus2Tear, chorus2, 0, 1)
+  push()
+  imageMode(CENTER);
+  scale(heartIncr2);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 405/heartBackScale/heartIncr2, 95/heartBackScale/heartIncr2)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale/heartIncr2, 110/heartMainScale/heartIncr2)
+    pop()
+    pop()
+  pop()
+  }
 
 
+  
+//sun
+push()
+if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
+
+  let sunLStart = (width/2, height/2);
+  let sunLEnd = (0, height/2);
+  let sunSplit = map(song.currentTime(), chorus1Tear, chorus1, 1, 5.5);
+  let sunX = (2013/sunSplit);
+  let sunXEndL = (sunX -100);
+  let sunXEndR = (sunX + 100);
+  let sunY = (690/sunSplit);
+  let sunYEndL = (sunY - 50);
+  let sunYEndR = (sunY - 50);
+  let sunXTearL = map(song.currentTime(), chorus1Tear, chorus1, sunX, sunXEndL);
+  let sunYTearL = map(song.currentTime(), chorus1Tear, chorus1, sunY, sunYEndL);
+  let sunXTearR = map(song.currentTime(), chorus1Tear, chorus1, sunX, sunXEndR);
+  let sunYTearR = map(song.currentTime(), chorus1Tear, chorus1, sunY, sunYEndR);
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunLImg, sunXTearL, sunYTearL);
+  pop()
+  pop()
+
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunRImg, sunXTearR, sunYTearR);
+  pop()
+  pop()
+}
+else if((song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
+  let sunLStart = (width/2, height/2);
+  let sunLEnd = (0, height/2);
+  let sunSplit = map(song.currentTime(), chorus2Tear, chorus2, 1, 5.5);
+  let sunX = (2013/sunSplit);
+  let sunXEndL = (sunX - 100);
+  let sunXEndR = (sunX + 100);
+  let sunY = (690/sunSplit);
+  let sunYEndL = (sunY - 50);
+  let sunYEndR = (sunY - 50);
+  let sunXTearL = map(song.currentTime(), chorus2Tear, chorus2, sunX, sunXEndL);
+  let sunYTearL = map(song.currentTime(), chorus2Tear, chorus2, sunY, sunYEndL);
+  let sunXTearR = map(song.currentTime(), chorus2Tear, chorus2, sunX, sunXEndR);
+  let sunYTearR = map(song.currentTime(), chorus2Tear, chorus2, sunY, sunYEndR);
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunLImg, sunXTearL, sunYTearL);
+  pop()
+  pop()
+
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunRImg, sunXTearR, sunYTearR);
+  pop()
+  pop()
+
+}
+
+else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+(song.currentTime() > chorus2)){
+}
 
 // //draw building layers
 // buildingsFrontImg.resize(1080, 300)
@@ -469,7 +534,7 @@ if((song.currentTime() > foreshadow && song.currentTime() <=verse1) ||
   let backgroundGradient = 1000
 
   for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
+    let gradientAmount = map(i, 0, backgroundGradient, 0, 3)
     let strokeColor = lerpColor(purple, pink, gradientAmount)
 
     stroke(strokeColor)
@@ -478,20 +543,20 @@ if((song.currentTime() > foreshadow && song.currentTime() <=verse1) ||
 
 
 
-  //retrolines and colour changing with drum
+  //retrolines and colour changing with other
 push()
 
-let drumMap = map(drum, 0, 100, 0, 90)
+let otherMap = map(other, 0, 100, 0, 90)
 let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
 strokeWeight(7)
-let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
+let OtherColorMap = map(other, 0, 100, 0,1) /// all one color, color change based on other volume
 
-for(let i=1; i<drumMap; i++){
+for(let i=1; i<otherMap; i++){
 let lineStep = i*8 - 5;
-let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
+let gradientAmount = map(i, 0, otherMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
 let LinesStrokeColor = lerpColor(purple, pink, gradientAmount) 
 stroke(LinesStrokeColor)
 line(lineStart, lineStep, lineEnd, lineStep)
@@ -500,62 +565,78 @@ pop()
 
 
 
-//draw building layer behind sun
-buildingsBehindImg.resize(1280, 220)
-image(buildingsBehindImg, 0, 80);
+// //draw building layer behind sun
+// buildingsBehindImg.resize(1280, 220)
+// image(buildingsBehindImg, 0, 80);
 
 
 
-
-   
-
- //sun
- push()
-  if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1) ||
-  (song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
-
-    push()
-    sunLImg.resize(282, 210)
-    image(sunLImg, 505, 115);
-    pop()
-
-    sunRImg.resize(282,210)
-    image(sunRImg, 505, 115);
-  
+   //moon
+if((song.currentTime() > chorus3 && song.currentTime() <= chorus3Switch)){
+  moonImg.resize(250, 250)
+  image(moonImg, width/2-125, 130);
   }
 
 
 
-  else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
-  (song.currentTime() > chorus2)){
-  }
 
+//sun
+push()
+if ((song.currentTime() > chorus1Untear && song.currentTime() <= verse2)){
 
-
-  else{
-  for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0,1)
-    let SunStrokeColor = lerpColor(red, yellow, gradientAmount)
-  
-    stroke(SunStrokeColor)
-    ellipse(width/2, height/4+75, i/4)
-  }
-  }
+  let sunLStart = (width/2, height/2);
+  let sunLEnd = (0, height/2);
+  let sunSplit = map(song.currentTime(), chorus1Untear, verse2, 5.5, 1);
+  let sunX = (2013/sunSplit);
+  let sunXEndL = (sunX -100);
+  let sunXEndR = (sunX + 100);
+  let sunY = (690/sunSplit);
+  let sunYEndL = (sunY - 50);
+  let sunYEndR = (sunY - 50);
+  let sunXTearL = map(song.currentTime(), chorus1Untear, verse2, sunXEndL, sunX);
+  let sunYTearL = map(song.currentTime(), chorus1Untear, verse2, sunYEndL, sunY);
+  let sunXTearR = map(song.currentTime(), chorus1Untear, verse2, sunXEndR, sunX);
+  let sunYTearR = map(song.currentTime(), chorus1Untear, verse2, sunYEndR, sunY);
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunLImg, sunXTearL, sunYTearL);
+  pop()
   pop()
 
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunRImg, sunXTearR, sunYTearR);
+  pop()
+  pop()
+}
 
+else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+(song.currentTime() > chorus2)){
+}
 
+else{
+for(let i=0; i<backgroundGradient; i++){
+  let gradientAmount = map(i, 0, backgroundGradient, 0,1)
+  let SunStrokeColor = lerpColor(red, yellow, gradientAmount)
 
+  stroke(SunStrokeColor)
+  ellipse(width/2, height/4+75, i/4)
+}
+}
+pop()
 
-
-
-  
 
 
 
 //draw horizon 
 stroke(0);
-fill(10);
+fill(11,4,50);
 beginShape();
 vertex(0, height);
 vertex(0, height/2-90);
@@ -570,7 +651,7 @@ endShape();
 //retro 80's infinite geometry lines
   //horizontal 
   push()
-  stroke(21, 87, 159);
+  stroke(148,100,167);
   strokeWeight(2);
   //left side
   line(0, height/2-60, width/2, height/2-35)
@@ -590,7 +671,7 @@ endShape();
   push()
   let Py = height/2-65
 
-  stroke(21, 87, 159);
+  stroke(158,110,177);
   strokeWeight(2);
   //left side
   line(85, Py-21, 0, height/2-40)
@@ -615,7 +696,7 @@ endShape();
 
 //draw road
 stroke(0);
-fill(30);
+fill(12);
 beginShape();
 vertex(width/2-60, height/2-65);
 vertex(width/2+60, height/2-65);
@@ -719,11 +800,12 @@ strokeWeight(roadLine2WeightSize)
 
 
  
-    
+//heart
 heartScale = map(drum, 0, 100, 1, 1.2);
 //heart
-if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
-(song.currentTime() > chorus2)){
+if ((song.currentTime() > chorus1 && song.currentTime() <= chorus1Untear) ||
+(song.currentTime() > chorus2 && song.currentTime() <=chorus2Untear) ||
+(song.currentTime()> chorus3Switch)){
   
   heartBackScale = map(drum, 0, 100, 1, 1.2);
   heartMainScale = map(drum, 0, 100, 1, 1.5);
@@ -741,8 +823,99 @@ if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
 
   }
 
+ 
 
-  //
+  //heart exiting by decr in size behind sun  
+if ((song.currentTime() > chorus1Untear && song.currentTime() <= verse2)){
+  push()
+  heartBackScale = map(drum, 0, 100, 1, 1.5);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+  heartDecr1 = map(song.currentTime(), chorus1Untear, verse2, 1, 0)
+  push()
+  scale(heartDecr1);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 415/heartBackScale/heartDecr1, 105/heartBackScale/heartDecr1)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale/heartDecr1, 110/heartMainScale/heartDecr1)
+    pop()
+    pop()
+  pop()
+  pop()
+  }
+
+  else if((song.currentTime() > chorus2Untear && song.currentTime() <= bridge)){
+    push()
+    heartDecr2 = map(song.currentTime(), chorus2Untear, bridge, 1, 0)
+    push()
+    scale(heartDecr2);
+      imageMode(CENTER);
+      push()
+      scale(1.8);
+      image(heartImg, 345/heartDecr2, 95/heartDecr2)
+      pop()
+      pop()
+    pop()
+    }
+  
+    else if((song.currentTime() > chorus3SwitchStart && song.currentTime() <= chorus3Switch)){
+      heartIncr3 = map(song.currentTime(), chorus3SwitchStart, chorus3Switch, 0, 1)
+      push()
+      imageMode(CENTER);
+      scale(heartIncr3);
+        imageMode(CENTER);
+        push()
+        scale(1.8);
+        image(heartImg, 345/heartIncr3, 95/heartIncr3)
+      pop()
+      pop()
+    pop()
+    }
+
+
+//sun
+push()
+if ((song.currentTime() > chorus1Untear && song.currentTime() <= verse2)){
+
+  let sunLStart = (width/2, height/2);
+  let sunLEnd = (0, height/2);
+  let sunSplit = map(song.currentTime(), chorus1Untear, verse2, 5.5, 1);
+  let sunX = (2013/sunSplit);
+  let sunXEndL = (sunX -100);
+  let sunXEndR = (sunX + 100);
+  let sunY = (690/sunSplit);
+  let sunYEndL = (sunY - 50);
+  let sunYEndR = (sunY - 50);
+  let sunXTearL = map(song.currentTime(), chorus1Untear, verse2, sunXEndL, sunX);
+  let sunYTearL = map(song.currentTime(), chorus1Untear, verse2, sunYEndL, sunY);
+  let sunXTearR = map(song.currentTime(), chorus1Untear, verse2, sunXEndR, sunX);
+  let sunYTearR = map(song.currentTime(), chorus1Untear, verse2, sunYEndR, sunY);
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunLImg, sunXTearL, sunYTearL);
+  pop()
+  pop()
+
+  push()
+  scale(sunSplit);
+  push()
+  imageMode(CENTER);
+  scale(0.32);
+  image(sunRImg, sunXTearR, sunYTearR);
+  pop()
+  pop()
+}
+
+else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+(song.currentTime() > chorus2)){
+}
 
 // //draw building layers
 // buildingsFrontImg.resize(1080, 300)
@@ -768,7 +941,7 @@ else if((song.currentTime() >bridge && song.currentTime() <=chorus3)){
   let backgroundGradient = 1000
 
   for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
+    let gradientAmount = map(i, 0, backgroundGradient, 0, 9)
     let strokeColor = lerpColor(navy, grey, gradientAmount)
 
     stroke(strokeColor)
@@ -777,29 +950,29 @@ else if((song.currentTime() >bridge && song.currentTime() <=chorus3)){
 
 
 
-  //retrolines and colour changing with drum
+  //retrolines and colour changing with other
 push()
 
-let drumMap = map(drum, 0, 100, 0, 90)
+let otherMap = map(other, 0, 100, 0, 90)
 let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
 strokeWeight(7)
-let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
+let OtherColorMap = map(other, 0, 100, 0,1) /// all one color, color change based on other volume
 
-for(let i=1; i<drumMap; i++){
+for(let i=1; i<otherMap; i++){
 let lineStep = i*8 - 5;
-let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
+let gradientAmount = map(i, 0, otherMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
 let LinesStrokeColor = lerpColor(navy, grey, gradientAmount) 
 stroke(LinesStrokeColor)
 line(lineStart, lineStep, lineEnd, lineStep)
 }
 pop()
 
-//mountains
-mountainsBehindImg.resize(1080, 250)
-image(mountainsBehindImg, 0, 50);
+// //mountains
+// mountainsBehindImg.resize(1350, 350)
+// image(mountainsBehindImg, 0, 12);
 
 
 
@@ -823,9 +996,9 @@ endShape();
 
 
 
-//mountains
-mountainsFrontImg.resize(1350, 350)
-image(mountainsFrontImg, 0, 12);
+// //mountains
+// mountainsFrontImg.resize(1350, 350)
+// image(mountainsFrontImg, 0, 12);
 
 
 //draw road
@@ -948,7 +1121,7 @@ else if((song.currentTime() > outro)){
   let backgroundGradient = 1000
 
   for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
+    let gradientAmount = map(i, 0, backgroundGradient, 0, 8)
     let strokeColor = lerpColor(navy, grey, gradientAmount)
 
     stroke(strokeColor)
@@ -957,29 +1130,29 @@ else if((song.currentTime() > outro)){
 
 
 
-  //retrolines and colour changing with drum
+  //retrolines and colour changing with other
 push()
 
-let drumMap = map(drum, 0, 100, 0, 90)
+let otherMap = map(other, 0, 100, 0, 90)
 let lineLength = width
 let lineStart = 0
 let lineEnd = lineStart+lineLength
 
 strokeWeight(7)
-let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
+let OtherColorMap = map(other, 0, 100, 0,1) /// all one color, color change based on other volume
 
-for(let i=1; i<drumMap; i++){
+for(let i=1; i<otherMap; i++){
 let lineStep = i*8 - 5;
-let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
+let gradientAmount = map(i, 0, otherMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
 let LinesStrokeColor = lerpColor(navy, grey, gradientAmount) 
 stroke(LinesStrokeColor)
 line(lineStart, lineStep, lineEnd, lineStep)
 }
 pop()
 
-//mountains
-mountainsBehindImg.resize(1080, 250)
-image(mountainsBehindImg, 0, 50);
+// //mountains
+// mountainsBehindImg.resize(1350, 350)
+// image(mountainsBehindImg, 0, 12);
 
 
 
@@ -995,9 +1168,9 @@ vertex(width, height/2-90);
 vertex(width, height);
 endShape();
 
-//mountains
-mountainsFrontImg.resize(1380, 350)
-image(mountainsFrontImg, 0, 12);
+// //mountains
+// mountainsFrontImg.resize(1350, 350)
+// image(mountainsFrontImg, 0, 12);
 
 //draw road
 stroke(0);
@@ -1122,10 +1295,9 @@ if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
     image(heartMainImg, 425/heartMainScale, 110/heartMainScale)
     pop()
     pop()
+}
 
-
-}}
-
+}
 pop()
 
 
@@ -1134,51 +1306,6 @@ pop()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// display "words"
-// stroke(255);
-// textAlign(CENTER);
-// textSize(other);
-// text(words, width/2, height/3);  
-
-
-
-
-//
 //drawing constant car elements 
 
 //car frame
@@ -1206,7 +1333,7 @@ noFill();
 stroke(255)
 strokeWeight(5)
 let waveHeight = map(vocal, 0, 50, 10, 60);
-let drumWave;
+let otherWave;
 let waveFreq = 3;
 
 beginShape();
