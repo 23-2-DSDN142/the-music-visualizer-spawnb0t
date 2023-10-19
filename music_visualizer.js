@@ -73,15 +73,16 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   //song.currentTime() variables for timing 
   let start = 0;
   let foreshadow = 2.25;   //retro city
-  let verse1 = 4;   //daytime city
+  let verse1 = 4.1;   //daytime city
   let chorus1Tear= 21.2;  //sun tearing 
   let chorus1= 22.2;   //retro city & heart
-  let verse2 = 34.36;   //daytime city
+  let chorus1Untear = 33.4 // heart disappear
+  let verse2 = 34.4;   //daytime city
   let chorus2Tear = 49.2;  //sun tearing
   let chorus2 = 50.3;    // retro city & heart
   let bridge = 74.3;    //night moonscape
-  let chorus3 = 130.1;   //electronic 
-  let outro = 166;   // moonscape
+  let chorus3 = 129.6;   //electronic 
+  let outro = 166.5;   // moonscape
 
 
 
@@ -133,7 +134,51 @@ image(buildingsBehindImg, 0, 80);
 
 
 
+//heart entering by incr in size behind heart tearing 
+if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
+  
+  heartBackScale = map(drum, 0, 100, 1, 1.2);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+  heartIncr1 = map(song.currentTime(), chorus1Tear, chorus1, 0, 1)
+  push()
+  imageMode(CENTER);
+  scale(heartIncr1);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 405/heartBackScale/heartIncr1, 95/heartBackScale/heartIncr1)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale/heartIncr1, 110/heartMainScale/heartIncr1)
+    pop()
+    pop()
+  pop()
+  }
 
+  else if((song.currentTime() > chorus2Tear && song.currentTime() <= chorus2)){
+  heartBackScale = map(drum, 0, 100, 1, 1.2);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+  heartIncr2 = map(song.currentTime(), chorus2Tear, chorus2, 0, 1)
+  push()
+  imageMode(CENTER);
+  scale(heartIncr2);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 405/heartBackScale/heartIncr2, 95/heartBackScale/heartIncr2)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale/heartIncr2, 110/heartMainScale/heartIncr2)
+    pop()
+    pop()
+  pop()
+  }
+
+ 
 
 
  //sun
@@ -144,8 +189,8 @@ image(buildingsBehindImg, 0, 80);
     let sunLEnd = (0, height/2);
     let sunSplit = map(song.currentTime(), chorus1Tear, chorus1, 1, 5.5);
     let sunX = (2013/sunSplit);
-    let sunXEndL = (sunX - 50);
-    let sunXEndR = (sunX + 50);
+    let sunXEndL = (sunX -100);
+    let sunXEndR = (sunX + 100);
     let sunY = (690/sunSplit);
     let sunYEndL = (sunY - 50);
     let sunYEndR = (sunY - 50);
@@ -171,14 +216,13 @@ image(buildingsBehindImg, 0, 80);
     pop()
     pop()
   }
-
   else if((song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
     let sunLStart = (width/2, height/2);
     let sunLEnd = (0, height/2);
     let sunSplit = map(song.currentTime(), chorus2Tear, chorus2, 1, 5.5);
     let sunX = (2013/sunSplit);
-    let sunXEndL = (sunX - 50);
-    let sunXEndR = (sunX + 50);
+    let sunXEndL = (sunX - 100);
+    let sunXEndR = (sunX + 100);
     let sunY = (690/sunSplit);
     let sunYEndL = (sunY - 50);
     let sunYEndR = (sunY - 50);
@@ -206,12 +250,9 @@ image(buildingsBehindImg, 0, 80);
 
   }
 
-
   else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
   (song.currentTime() > chorus2)){
   }
-
-
 
   else{
   for(let i=0; i<backgroundGradient; i++){
@@ -466,18 +507,7 @@ image(buildingsBehindImg, 0, 80);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+   
 
  //sun
  push()
