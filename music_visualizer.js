@@ -15,7 +15,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     wheelImg = loadImage('assets/wheel.png');
     buildingsFrontImg = loadImage('assets/buildingsFront.png');
     buildingsBehindImg = loadImage('assets/buildingsBehind.png');
-    moonImg = loadImage('assets/moon.png');
+    marsImg = loadImage('assets/mars.png');
     heartImg = loadImage('assets/heart.png');
     heartMainImg = loadImage('assets/heartMain.png');
     heartBackImg = loadImage('assets/heartBack.png');
@@ -25,7 +25,6 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     cityImg = loadImage('assets/city.png');
     sunLImg = loadImage('assets/sunL.png');
     sunRImg = loadImage('assets/sunR.png');
-    roadLineImg = loadImage('assets/roadLine.png');
 
 
     lineStartX = (width/2);
@@ -36,7 +35,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   
     firstRun = false
   }
-  console.log(song.duration())
+  console.log(counter)
   //let slowIncr = map(song.currentTime(), 0, song.duration(), 0, 2300);
 
   background(255)
@@ -60,15 +59,33 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
   strokeWeight(3)
   let backgroundGradient = 1000
+
+  //counter variables for timing 
+  let start = 0;
+  let foreshadow = 140;   //retro city
+  let verse1 = 250;   //daytime city
+  let chorus1Tear= 1240;  //sun tearing 
+  let chorus1= 1340;   //retro city & heart
+  let verse2 = 2060;   //daytime city
+  let chorus2Tear = 2925;  //sun tearing
+  let chorus2 = 3025;    // retro city & heart
+  let bridge = 4460;    //night moonscape
+
+  let chorus3Tear = 7760;   //sun tear
+  let chorus3 = 7820;   //electronic - orange/black moon
+  let outro = 9950;   // moonscape
+  
   
 
 
 //
 //
 //if statement controlling what is shown in each part of the song chronologically according to counter variable
-
+push()
 //daytime city
-if((counter <= 135) || (counter >=250 && counter <=1339) || (counter >=2060 && counter <=2799)){
+if((counter >= start && counter <= foreshadow) || 
+(counter >=verse1+1 && counter <=chorus1) || 
+(counter >=verse2+1 && counter <=chorus2)){
   //gradient background
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midBlueYellow = lerpColor(blue, yellow, 1) //make 0.85 midPPLerp so it visualises vocals
@@ -165,11 +182,13 @@ strokeWeight(2);
 
 }
 
-//
+
 //
 //retro city
-if((counter >= 136 && counter <=249) || 
-(counter >= 1340 && counter <= 2059)|| (counter >=2800 && counter <=4459)){
+if((counter >= foreshadow+1 && counter <=verse1) || 
+(counter >= chorus1+1 && counter <= verse2) || 
+(counter >=chorus2+1 && counter <=bridge) ||
+(counter >= chorus3+1 && counter <= outro)){
   //gradient background
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
@@ -247,6 +266,24 @@ endShape()
 
 
 
+heartScale = map(drum, 0, 100, 1, 1.2);
+//heart
+if ((counter >= chorus1+1 && counter <= verse2) ||
+(counter >= chorus2+1)){
+  
+  push()
+  heartBackImg.resize(220, 270)
+  heartMainImg.resize(220, 270)
+  pop()
+
+  image(heartBackImg, 440*heartScale, 100*heartScale)
+  image(heartMainImg, 440*heartScale, 100*heartScale)
+
+  }
+
+
+  //
+
 // //draw building layers
 // buildingsFrontImg.resize(1080, 300)
 // image(buildingsFrontImg, 0, 80);
@@ -258,11 +295,12 @@ endShape()
 
 }
 
+
 //
 //
-//
-//dark moonscape
-else if(counter >=4460){
+//moonscape bridge
+else if((counter >=bridge+1 && counter <=chorus3) ||
+(counter >= outro+1)){
   //gradient background
   let midPPLerp = map(vocal, 0, 100, 0, 1)
   let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
@@ -306,9 +344,9 @@ image(mountainsBehindImg, 0, 50);
 
 
 
-//moon
-moonImg.resize(250, 250)
-image(moonImg, width/2-125, 130);
+//mars
+marsImg.resize(250, 250)
+image(marsImg, width/2-125, 130);
 
 
 
@@ -339,9 +377,6 @@ vertex(0, height/2+210)
 vertex(width/2-40, height/2-65);
 endShape()
  
-stroke(255);
-strokeWeight(2);
-line(width/2+500, height, width/2, height/2-65) 
 
 //mountains
 mountainsFrontImg.resize(1080, 350)
@@ -351,46 +386,118 @@ image(mountainsFrontImg, 0, 12);
 }
 
 
-
-
-
-
-
-
 //
 //
-//
-else if(counter >8000){
-  
-background(0)
+//moonscape outro
+else{
+  //gradient background
+  let midPPLerp = map(vocal, 0, 100, 0, 1)
+  let midPinkPurple = lerpColor(pink, purple, 1) //make 0.85 midPPLerp so it visualises vocals
 
-//heart
-image(heartImg, 420, 100);
+  strokeWeight(3)
+  let backgroundGradient = 1000
 
+  for(let i=0; i<backgroundGradient; i++){
+    let gradientAmount = map(i, 0, backgroundGradient, 0, 1.5)
+    let strokeColor = lerpColor(navy, grey, gradientAmount)
+
+    stroke(strokeColor)
+    line(0, 100+i-100, width, 100+i-100)
+  }
+
+
+
+  //retrolines and colour changing with drum
+push()
+
+let drumMap = map(drum, 0, 100, 0, 90)
+let lineLength = 1080
+let lineStart = 0
+let lineEnd = lineStart+lineLength
+
+strokeWeight(7)
+let DrumColorMap = map(drum, 0, 100, 0,1) /// all one color, color change based on Drum volume
+
+for(let i=1; i<drumMap; i++){
+let lineStep = i*8 - 5;
+let gradientAmount = map(i, 0, drumMap, 0,1) // gradient of lines. colour change based on how far down the page the lines are
+let LinesStrokeColor = lerpColor(navy, grey, gradientAmount) 
+stroke(LinesStrokeColor)
+line(lineStart, lineStep, lineEnd, lineStep)
 }
+pop()
+
+//mountains
+mountainsBehindImg.resize(1080, 250)
+image(mountainsBehindImg, 0, 50);
 
 
 
+//draw horizon 
+stroke(0);
+fill(180);
+beginShape();
+vertex(0, height);
+vertex(0, height/2-90);
+vertex(width/2-40, height/2-65);
+vertex(width/2+40, height/2-65);
+vertex(width, height/2-90);
+vertex(width, height);
+endShape();
 
 
+
+//draw road
+stroke(0);
+fill(100);
+beginShape();
+vertex(width/2-40, height/2-65);
+vertex(width/2+40, height/2-65);
+vertex(width, height/2+50);
+vertex(width, height);
+vertex(0, height);
+vertex(0, height/2+210)
+vertex(width/2-40, height/2-65);
+endShape()
+ 
+
+//mountains
+mountainsFrontImg.resize(1080, 350)
+image(mountainsFrontImg, 0, 12);
+  
 
 heartScale = map(drum, 0, 100, 1, 1.2);
 //heart
-if ((counter >= 1250 && counter <= 2070)){
+if ((counter >= chorus2+1)){
   
   push()
-  heartBackImg.resize(220*heartScale, 270*heartScale)
-  heartMainImg.resize(220*heartScale, 270*heartScale)
+  heartBackImg.resize(220, 270)
+  heartMainImg.resize(220, 270)
   pop()
 
-  image(heartBackImg, 440, 100)
-  image(heartMainImg, 440, 100)
+  image(heartBackImg, 440*heartScale, 100*heartScale)
+  image(heartMainImg, 440*heartScale, 100*heartScale)
 
   }
-  
+
+}
+
+pop()
+
+
+
+
+
+
+
+
+//
+//
+//
   //sun
- 
-  if ((counter >= 1200 && counter <= 1320)){
+ push()
+  if ((counter >= chorus1Tear+1 && counter <= chorus1) ||
+  (counter >= chorus2Tear+1 && counter <=chorus2)){
 
     push()
     sunLImg.resize(282, 210)
@@ -401,8 +508,20 @@ if ((counter >= 1250 && counter <= 2070)){
     image(sunRImg, 405, 115);
   
   }
-  else if((counter >= 1351 )){
+
+
+
+
+
+
+  else if((counter >= chorus1+1 && counter <= verse2) ||
+  (counter >= chorus2+1)){
   }
+
+
+
+
+
   else{
   for(let i=0; i<backgroundGradient; i++){
     let gradientAmount = map(i, 0, backgroundGradient, 0,1)
@@ -412,6 +531,38 @@ if ((counter >= 1250 && counter <= 2070)){
     ellipse(width/2, height/4+75, i/4)
   }
   }
+  pop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -455,7 +606,7 @@ image(carFrame2Img, -22, -10);
 //speedometer needle
 push()
 translate(375, 565)
-rotate(drum*3)
+rotate(bass*3)
 needleImg.resize(25, 80)
 image(needleImg, 0, 0);
 pop()
