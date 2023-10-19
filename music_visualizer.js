@@ -80,10 +80,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let chorus2Tear = 49.2;  //sun tearing
   let chorus2 = 50.3;    // retro city & heart
   let bridge = 74.3;    //night moonscape
-  let chorus3 = 130.4;   //electronic - orange/black moon
+  let chorus3 = 130.1;   //electronic 
   let outro = 166;   // moonscape
-  
-  
 
 
 
@@ -140,19 +138,73 @@ image(buildingsBehindImg, 0, 80);
 
  //sun
  push()
-  if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1) ||
-  (song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
+  if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
 
+    let sunLStart = (width/2, height/2);
+    let sunLEnd = (0, height/2);
+    let sunSplit = map(song.currentTime(), chorus1Tear, chorus1, 1, 5.5);
+    let sunX = (2013/sunSplit);
+    let sunXEndL = (sunX - 50);
+    let sunXEndR = (sunX + 50);
+    let sunY = (690/sunSplit);
+    let sunYEndL = (sunY - 50);
+    let sunYEndR = (sunY - 50);
+    let sunXTearL = map(song.currentTime(), chorus1Tear, chorus1, sunX, sunXEndL);
+    let sunYTearL = map(song.currentTime(), chorus1Tear, chorus1, sunY, sunYEndL);
+    let sunXTearR = map(song.currentTime(), chorus1Tear, chorus1, sunX, sunXEndR);
+    let sunYTearR = map(song.currentTime(), chorus1Tear, chorus1, sunY, sunYEndR);
     push()
-    sunLImg.resize(282, 210)
-    image(sunLImg, 505, 115);
+    scale(sunSplit);
+    push()
+    imageMode(CENTER);
+    scale(0.32);
+    image(sunLImg, sunXTearL, sunYTearL);
+    pop()
     pop()
 
-    sunRImg.resize(282,210)
-    image(sunRImg, 505, 115);
-  
+    push()
+    scale(sunSplit);
+    push()
+    imageMode(CENTER);
+    scale(0.32);
+    image(sunRImg, sunXTearR, sunYTearR);
+    pop()
+    pop()
   }
 
+  else if((song.currentTime() > chorus2Tear && song.currentTime() <=chorus2)){
+    let sunLStart = (width/2, height/2);
+    let sunLEnd = (0, height/2);
+    let sunSplit = map(song.currentTime(), chorus2Tear, chorus2, 1, 5.5);
+    let sunX = (2013/sunSplit);
+    let sunXEndL = (sunX - 50);
+    let sunXEndR = (sunX + 50);
+    let sunY = (690/sunSplit);
+    let sunYEndL = (sunY - 50);
+    let sunYEndR = (sunY - 50);
+    let sunXTearL = map(song.currentTime(), chorus2Tear, chorus2, sunX, sunXEndL);
+    let sunYTearL = map(song.currentTime(), chorus2Tear, chorus2, sunY, sunYEndL);
+    let sunXTearR = map(song.currentTime(), chorus2Tear, chorus2, sunX, sunXEndR);
+    let sunYTearR = map(song.currentTime(), chorus2Tear, chorus2, sunY, sunYEndR);
+    push()
+    scale(sunSplit);
+    push()
+    imageMode(CENTER);
+    scale(0.32);
+    image(sunLImg, sunXTearL, sunYTearL);
+    pop()
+    pop()
+
+    push()
+    scale(sunSplit);
+    push()
+    imageMode(CENTER);
+    scale(0.32);
+    image(sunRImg, sunXTearR, sunYTearR);
+    pop()
+    pop()
+
+  }
 
 
   else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
@@ -346,6 +398,10 @@ strokeWeight(roadLine2WeightSize)
 
 
 
+  
+
+
+
 // //draw building layers
 // buildingsFrontImg.resize(1080, 300)
 // image(buildingsFrontImg, 0, 80);
@@ -355,23 +411,6 @@ strokeWeight(roadLine2WeightSize)
 // cityImg.resize(500, 550)
 // image(cityImg, 0, 20);
 
-
-
-
-
-heartBackScale = map(drum, 0, 100, 1, 1.1);
-heartMainScale = map(drum, 0, 100, 1, 1.15);
-  push()
-  imageMode(CENTER);
-  push()
-  scale(heartBackScale*1.6);
-  image(heartBackImg, 365/heartBackScale, 80/heartBackScale)
-  pop()
-    push()
-  scale(heartMainScale*1.5);
-  image(heartMainImg, 395/heartMainScale, 80/heartMainScale)
-  pop()
-  pop()
 }
 
 
@@ -649,18 +688,26 @@ strokeWeight(roadLine2WeightSize)
 
 
 
+ 
+    
 heartScale = map(drum, 0, 100, 1, 1.2);
 //heart
 if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
 (song.currentTime() > chorus2)){
   
-  push()
-  heartBackImg.resize(220, 270)
-  heartMainImg.resize(220, 270)
-  pop()
-
-  image(heartBackImg, 440*heartScale, 100*heartScale)
-  image(heartMainImg, 440*heartScale, 100*heartScale)
+  heartBackScale = map(drum, 0, 100, 1, 1.2);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 405/heartBackScale, 95/heartBackScale)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale, 110/heartMainScale)
+    pop()
+    pop()
 
   }
 
@@ -856,8 +903,6 @@ strokeWeight(roadLine2WeightSize)
 
 
 
-
-
 }
 
 
@@ -1030,18 +1075,26 @@ strokeWeight(roadLine2WeightSize)
 
   
 
-heartScale = map(drum, 0, 100, 1, 1.2);
 //heart
+if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
+(song.currentTime() > chorus2)){
   
-  push()
-  heartBackImg.resize(220, 270)
-  heartMainImg.resize(220, 270)
-  pop()
+  heartBackScale = map(drum, 0, 100, 1, 1.2);
+  heartMainScale = map(drum, 0, 100, 1, 1.5);
+    push()
+    imageMode(CENTER);
+    push()
+    scale(heartBackScale*1.5);
+    image(heartBackImg, 405/heartBackScale, 95/heartBackScale)
+    pop()
+      push()
+    scale(heartMainScale*1.5);
+    image(heartMainImg, 425/heartMainScale, 110/heartMainScale)
+    pop()
+    pop()
 
-  image(heartBackImg, 440*heartScale, 100*heartScale)
-  image(heartMainImg, 440*heartScale, 100*heartScale)
 
-}
+}}
 
 pop()
 
