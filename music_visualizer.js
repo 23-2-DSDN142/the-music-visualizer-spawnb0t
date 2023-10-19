@@ -80,7 +80,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let chorus2Tear = 49.2;  //sun tearing
   let chorus2 = 50.3;    // retro city & heart
   let bridge = 74.3;    //night moonscape
-  let chorus3 = 130.2;   //electronic - orange/black moon
+  let chorus3 = 130.4;   //electronic - orange/black moon
   let outro = 166;   // moonscape
   
   
@@ -356,6 +356,22 @@ strokeWeight(roadLine2WeightSize)
 // image(cityImg, 0, 20);
 
 
+
+
+
+heartBackScale = map(drum, 0, 100, 1, 1.1);
+heartMainScale = map(drum, 0, 100, 1, 1.15);
+  push()
+  imageMode(CENTER);
+  push()
+  scale(heartBackScale*1.6);
+  image(heartBackImg, 365/heartBackScale, 80/heartBackScale)
+  pop()
+    push()
+  scale(heartMainScale*1.5);
+  image(heartMainImg, 395/heartMainScale, 80/heartMainScale)
+  pop()
+  pop()
 }
 
 
