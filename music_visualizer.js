@@ -10,26 +10,23 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     carFrame2Img = loadImage('assets/carFrame2.png');
     needleImg = loadImage('assets/needle.png');
     wheelImg = loadImage('assets/wheel.png');
-    buildingsFrontImg = loadImage('assets/buildingsFront.png');
-    buildingsBehindImg = loadImage('assets/buildingsBehind.png');
     moonImg = loadImage('assets/moon.png');
     marsImg = loadImage('assets/mars.png');
     heartImg = loadImage('assets/heart.png');
     heartMainImg = loadImage('assets/heartMain.png');
     heartBackImg = loadImage('assets/heartBack.png');
-    mountainsImg = loadImage('assets/mountains.png');
-    mountainsFrontImg = loadImage('assets/mountainsFront.png');
-    mountainsBehindImg = loadImage('assets/mountainsBehind.png');
-    cityImg = loadImage('assets/city.png');
     sunLImg = loadImage('assets/sunL.png');
     sunRImg = loadImage('assets/sunR.png');
+    craterImg = loadImage('assets/crater.png');
+
+    a = (height/2);
 
     //road line variables
     lineOffsetX = (4.7*0.8);
     lineOffsetY = (4*0.8); 
       //lineOffsetX & Y control the speed of the road lines and therefore illusion of car speed
     lineStartX = (width/2);
-    lineStartY = (height/2-65);
+    lineStartY = (a-65);
     line2StartX = (lineStartX +lineOffsetX*25);
     line2StartY = (lineStartY +lineOffsetY*25);
     line3StartX = (line2StartX +lineOffsetX*25);
@@ -38,9 +35,65 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     line4StartY = (line3StartY +lineOffsetY*25);
     line5StartX = (line4StartX +lineOffsetX*25);
     line5StartY = (line4StartY +lineOffsetY*25);
-  
-  
-  
+
+    line1OffsetX = (-1.9*0);
+    line1OffsetY = (0);
+    line1x = (85)
+    line1y = (a-82)
+    line2OffsetX = (-1.52*0.8);
+    line2OffsetY = (0.8);
+    line2x = (150)
+    line2y = (a-79)
+    line3OffsetX = (-1.225*1.7);
+    line3OffsetY = (1.7);
+    line3x = (215)
+    line3y = (a-76)
+    line4OffsetX = (-1.026*2);
+    line4OffsetY = (2);
+    line4x = (280)
+    line4y = (a-73)
+    line5OffsetX = (-0.6705*3);
+    line5OffsetY = (3);
+    line5x = (345)
+    line5y = (a-70)
+    line6OffsetX = (-0.448*3.6);
+    line6OffsetY = (3.6);
+    line6x = (410)
+    line6y = (a-67)
+    line7OffsetX = (-0.3735*4);
+    line7OffsetY = (4);
+    line7x = (475)
+    line7y = (a-63)
+    line8OffsetX = (0.62*2);
+    line8OffsetY = (2);
+    line8x = (813)
+    line8y = (a-68)
+    line9OffsetX = (0.86*1.8);
+    line9OffsetY = (1.8);
+    line9x = (868)
+    line9y = (a-70)
+    line10OffsetX = (0.875*1.7);
+    line10OffsetY = (1.7);
+    line10x = (935)
+    line10y = (a-72)
+    line11OffsetX = (1.2*1.6);
+    line11OffsetY = (1.6);
+    line11x = (1000)
+    line11y = (a-76)
+    line12OffsetX = (1.67*1.4);
+    line12OffsetY = (1.4);
+    line12x = (1065)
+    line12y = (a-78)
+    line13OffsetX = (2.47*0.8);
+    line13OffsetY = (0.8);
+    line13x = (1130)
+    line13y = (a-81)
+    line14OffsetX = (3.6*0.4);
+    line14OffsetY = (0.4);
+    line14x = (1195)
+    line14y = (a-84)
+
+
     firstRun = false
   }
   console.log(song.currentTime())
@@ -53,8 +106,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   noFill()
 
 
-  let purple = color(127, 37, 213)
-  let pink = color(223, 73, 133)  
+  let purple = color(117, 27, 203)
+  let pink = color(243, 93, 153)  
   let yellow = color(240, 197, 5)
   let red = color(204, 14, 14)
   let blue = color(36,170,220)
@@ -79,7 +132,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let chorus2Tear = 49.2;  //sun tearing
   let chorus2 = 50.3;    // retro city & heart
   let chorus2Untear = 73.3; // heart dissapearing
-  let bridge = 74.3;    //night moonscape
+  let bridge = 74.2;    //night moonscape
+  let craterSwitch = 102.15; //second crater moves
   let chorus3 = 130;   //electronic 
   let chorus3SwitchStart = 141.3; // heart incr
   let chorus3Switch = 142.3;//planet switches to beating heart
@@ -212,6 +266,17 @@ pop()
   }
 
   else{
+push()
+//glow
+push()
+let glowOpacity = map(other, 0, 100, -200, 100)
+noStroke()
+fill(250, 200, 150, glowOpacity)
+push()
+ellipse((width/2), (height/2-100), 350, 350);
+pop()
+pop()
+
   for(let i=0; i<backgroundGradient; i++){
     let gradientAmount = map(i, 0, backgroundGradient, 0,1)
     let SunStrokeColor = lerpColor(red, yellow, gradientAmount)
@@ -278,6 +343,195 @@ stroke(185);
   line(width-85, Py-18, width, height/2-60)
   pop()
 
+// //moving dot simulating geometry lines moving and therefore car moving/driving
+push()
+translate(0, 2)
+stroke(180);
+strokeWeight(8);
+fill(180);
+
+line(line1x, line1y, line1x+line1OffsetX, line1y+line1OffsetY);
+
+line1x = line1x + line1OffsetX
+line1y = line1y + line1OffsetY
+
+if(line1x <= 0){
+line1x = 85
+}
+
+if(line1y >= a-40){
+  line1y = a-82
+}
+
+line(line2x, line2y, line2x+line2OffsetX, line2y+line2OffsetY);
+
+line2x = line2x + line2OffsetX
+line2y = line2y + line2OffsetY
+
+if(line2x <= 0){
+line2x = 150
+}
+
+if(line2y >= a+20){
+  line2y = a-79
+}
+
+line(line3x, line3y, line3x+line3OffsetX, line3y+line3OffsetY);
+
+line3x = line3x + line3OffsetX
+line3y = line3y + line3OffsetY
+
+if(line3x <= 0){
+line3x = 215
+}
+
+if(line3y >= a+100){
+  line3y = a-76
+}
+
+line(line4x, line4y, line4x+line4OffsetX, line4y+line4OffsetY);
+
+line4x = line4x + line4OffsetX
+line4y = line4y + line4OffsetY
+
+if(line4x <= 0){
+line4x = 280
+}
+
+if(line4y >= a+200){
+  line4y = a-73
+}
+
+line(line5x, line5y, line5x+line5OffsetX, line5y+line5OffsetY);
+
+line5x = line5x + line5OffsetX
+line5y = line5y + line5OffsetY
+
+if(line5x <= 240){
+line5x = 348
+}
+
+if(line5y >= a+92){
+  line5y = a-70
+}
+
+line(line6x, line6y, line6x+line6OffsetX, line6y+line6OffsetY);
+
+line6x = line6x + line6OffsetX
+line6y = line6y + line6OffsetY
+
+if(line6x <= 365){
+line6x = 411
+}
+
+if(line6y >= a+35){
+  line6y = a-67
+}
+
+line(line7x, line7y, line7x+line7OffsetX, line7y+line7OffsetY);
+
+line7x = line7x + line7OffsetX
+line7y = line7y + line7OffsetY
+
+if(line7x <= 452){
+line7x = 475
+}
+
+if(line7y >= a-5){
+  line7y = a-67
+}
+
+line(line8x, line8y, line8x+line8OffsetX, line8y+line8OffsetY);
+
+line8x = line8x + line8OffsetX
+line8y = line8y + line8OffsetY
+
+if(line8x >= 830){
+line8x = 813
+}
+
+if(line8y >= a-40){
+  line8y = a-68
+}
+
+line(line9x, line9y, line9x+line9OffsetX, line9y+line9OffsetY);
+
+line9x = line9x + line9OffsetX
+line9y = line9y + line9OffsetY
+
+if(line9x >= 904){
+line9x = 868
+}
+
+if(line9y >= a-28){
+  line9y = a-70
+}
+
+line(line10x, line10y, line10x+line10OffsetX, line10y+line10OffsetY);
+
+line10x = line10x + line10OffsetX
+line10y = line10y + line10OffsetY
+
+if(line10x >= 987.5){
+line10x = 935
+}
+
+if(line10y >= a-12){
+  line10y = a-72
+}
+
+line(line11x, line11y, line11x+line11OffsetX, line11y+line11OffsetY);
+
+line11x = line11x + line11OffsetX
+line11y = line11y + line11OffsetY
+
+if(line11x >= 1105){
+line11x = 1000
+}
+
+if(line11y >= a+12){
+  line11y = a-76
+}
+
+line(line12x, line12y, line12x+line12OffsetX, line12y+line12OffsetY);
+
+line12x = line12x + line12OffsetX
+line12y = line12y + line12OffsetY
+
+if(line12x >= width){
+line12x = 1065
+}
+
+if(line12y >= a+50){
+  line12y = a-78
+}
+
+line(line13x, line13y, line13x+line13OffsetX, line13y+line13OffsetY);
+
+line13x = line13x + line13OffsetX
+line13y = line13y + line13OffsetY
+
+if(line13x >= width){
+line13x = 1130
+}
+
+if(line13y >= a-20){
+  line13y = a-81
+}
+
+line(line14x, line14y, line14x+line14OffsetX, line14y+line14OffsetY);
+
+line14x = line14x + line14OffsetX
+line14y = line14y + line14OffsetY
+
+if(line14x >= width){
+line14x = 1195
+}
+
+if(line14y >= a-60){
+  line14y = a-84
+}
+pop()
 
 
 //draw road
@@ -388,7 +642,6 @@ strokeWeight(roadLine2WeightSize)
   pop()
 
 
-
   //heart entering by incr in size behind sun tearing 
 if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
   
@@ -431,10 +684,11 @@ if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
     pop()
     pop()
   pop()
+  
   }
 
 
-  
+
 //sun
 push()
 if ((song.currentTime() > chorus1Tear && song.currentTime() <= chorus1)){
@@ -512,11 +766,6 @@ else if((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
 // buildingsFrontImg.resize(1080, 300)
 // image(buildingsFrontImg, 0, 80);
 
-
-// //trailling being inside city
-// cityImg.resize(500, 550)
-// image(cityImg, 0, 20);
-
 }
 
 
@@ -534,7 +783,7 @@ if((song.currentTime() > foreshadow && song.currentTime() <=verse1) ||
   let backgroundGradient = 1000
 
   for(let i=0; i<backgroundGradient; i++){
-    let gradientAmount = map(i, 0, backgroundGradient, 0, 3)
+    let gradientAmount = map(i, 0, backgroundGradient, 0, 1)
     let strokeColor = lerpColor(purple, pink, gradientAmount)
 
     stroke(strokeColor)
@@ -573,6 +822,23 @@ pop()
 
    //moon
 if((song.currentTime() > chorus3 && song.currentTime() <= chorus3Switch)){
+
+        //glow
+        push()
+        let glowOpacity = map(other, 0, 100, -200, 100)
+        strokeWeight(150);
+        stroke(255, 255, 255, glowOpacity)
+        fill(255, 255, 255, glowOpacity)
+        push()
+        ellipse((width/2), (height/2-100), 350, 350);
+        line(400, 100, width/2, height/2-100)
+        line(880, 100, width/2, height/2-100)
+        line(640, 100, width/2, height/2-100)
+        line(400, 250, width/2, height/2-100)
+        line(880, 250, width/2, height/2-100)
+        pop()
+        pop()
+
   moonImg.resize(250, 250)
   image(moonImg, width/2-125, 130);
   }
@@ -692,7 +958,193 @@ endShape();
   pop()
 
 
+// //moving dot simulating geometry lines moving and therefore car moving/driving
+push()
+stroke(11,4,50);
+strokeWeight(8);
 
+line(line1x, line1y, line1x+line1OffsetX, line1y+line1OffsetY);
+
+line1x = line1x + line1OffsetX
+line1y = line1y + line1OffsetY
+
+if(line1x <= 0){
+line1x = 85
+}
+
+if(line1y >= a-40){
+  line1y = a-82
+}
+
+line(line2x, line2y, line2x+line2OffsetX, line2y+line2OffsetY);
+
+line2x = line2x + line2OffsetX
+line2y = line2y + line2OffsetY
+
+if(line2x <= 0){
+line2x = 150
+}
+
+if(line2y >= a+20){
+  line2y = a-79
+}
+
+line(line3x, line3y, line3x+line3OffsetX, line3y+line3OffsetY);
+
+line3x = line3x + line3OffsetX
+line3y = line3y + line3OffsetY
+
+if(line3x <= 0){
+line3x = 215
+}
+
+if(line3y >= a+100){
+  line3y = a-76
+}
+
+line(line4x, line4y, line4x+line4OffsetX, line4y+line4OffsetY);
+
+line4x = line4x + line4OffsetX
+line4y = line4y + line4OffsetY
+
+if(line4x <= 0){
+line4x = 280
+}
+
+if(line4y >= a+200){
+  line4y = a-73
+}
+
+line(line5x, line5y, line5x+line5OffsetX, line5y+line5OffsetY);
+
+line5x = line5x + line5OffsetX
+line5y = line5y + line5OffsetY
+
+if(line5x <= 240){
+line5x = 348
+}
+
+if(line5y >= a+92){
+  line5y = a-70
+}
+
+line(line6x, line6y, line6x+line6OffsetX, line6y+line6OffsetY);
+
+line6x = line6x + line6OffsetX
+line6y = line6y + line6OffsetY
+
+if(line6x <= 365){
+line6x = 411
+}
+
+if(line6y >= a+35){
+  line6y = a-67
+}
+
+line(line7x, line7y, line7x+line7OffsetX, line7y+line7OffsetY);
+
+line7x = line7x + line7OffsetX
+line7y = line7y + line7OffsetY
+
+if(line7x <= 452){
+line7x = 475
+}
+
+if(line7y >= a-5){
+  line7y = a-67
+}
+
+line(line8x, line8y, line8x+line8OffsetX, line8y+line8OffsetY);
+
+line8x = line8x + line8OffsetX
+line8y = line8y + line8OffsetY
+
+if(line8x >= 830){
+line8x = 813
+}
+
+if(line8y >= a-40){
+  line8y = a-68
+}
+
+line(line9x, line9y, line9x+line9OffsetX, line9y+line9OffsetY);
+
+line9x = line9x + line9OffsetX
+line9y = line9y + line9OffsetY
+
+if(line9x >= 904){
+line9x = 868
+}
+
+if(line9y >= a-28){
+  line9y = a-70
+}
+
+line(line10x, line10y, line10x+line10OffsetX, line10y+line10OffsetY);
+
+line10x = line10x + line10OffsetX
+line10y = line10y + line10OffsetY
+
+if(line10x >= 987.5){
+line10x = 935
+} 
+
+if(line10y >= a-12){
+  line10y = a-72
+}
+
+line(line11x, line11y, line11x+line11OffsetX, line11y+line11OffsetY);
+
+line11x = line11x + line11OffsetX
+line11y = line11y + line11OffsetY
+
+if(line11x >= 1105){
+line11x = 1000
+}
+
+if(line11y >= a+12){
+  line11y = a-76
+}
+
+line(line12x, line12y, line12x+line12OffsetX, line12y+line12OffsetY);
+
+line12x = line12x + line12OffsetX
+line12y = line12y + line12OffsetY
+
+if(line12x >= width){
+line12x = 1065
+}
+
+if(line12y >= a+50){
+  line12y = a-78
+}
+
+line(line13x, line13y, line13x+line13OffsetX, line13y+line13OffsetY);
+
+line13x = line13x + line13OffsetX
+line13y = line13y + line13OffsetY
+
+if(line13x >= width){
+line13x = 1130
+}
+
+if(line13y >= a-20){
+  line13y = a-81
+}
+
+line(line14x, line14y, line14x+line14OffsetX, line14y+line14OffsetY);
+
+line14x = line14x + line14OffsetX
+line14y = line14y + line14OffsetY
+
+if(line14x >= width){
+line14x = 1195
+}
+
+if(line14y >= a-60){
+  line14y = a-84
+}
+pop()
 
 //draw road
 stroke(0);
@@ -798,15 +1250,44 @@ strokeWeight(roadLine2WeightSize)
 
 
 
-
+if((song.currentTime() > chorus3SwitchStart && song.currentTime() <= outro)){
+//glow
+push()
+let glowOpacity = map(other, 0, 100, -200, 100)
+strokeWeight(150);
+stroke(255, 255, 255, glowOpacity)
+fill(255, 255, 255, glowOpacity)
+push()
+ellipse((width/2), (height/2-100), 350, 350);
+line(400, 100, width/2, height/2-100)
+line(880, 100, width/2, height/2-100)
+line(640, 100, width/2, height/2-100)
+line(400, 250, width/2, height/2-100)
+line(880, 250, width/2, height/2-100)
+pop()
+pop()
+}
  
 //heart
 heartScale = map(drum, 0, 100, 1, 1.2);
-//heart
 if ((song.currentTime() > chorus1 && song.currentTime() <= chorus1Untear) ||
 (song.currentTime() > chorus2 && song.currentTime() <=chorus2Untear) ||
 (song.currentTime()> chorus3Switch)){
   
+      //heart glowing
+push()
+let glowOpacity = map(other, 0, 100, -200, 100)
+let glowScale = map(other, 0, 100, 0.8, 1)
+
+stroke(250, 217, 150, glowOpacity)
+fill(250, 217, 150, glowOpacity) 
+push()
+scale(glowScale);
+ellipse((width/2)/glowScale, (height/2-150)/glowScale, 390, 350);
+pop()
+pop()
+
+//heart
   heartBackScale = map(drum, 0, 100, 1, 1.2);
   heartMainScale = map(drum, 0, 100, 1, 1.5);
     push()
@@ -977,8 +1458,11 @@ pop()
 
 
 //mars
+push()
+
 marsImg.resize(250, 250)
 image(marsImg, width/2-125, 130);
+pop()
 
 
 
@@ -1104,7 +1588,22 @@ strokeWeight(roadLine2WeightSize)
   pop()
 
 
-
+push()
+  push()
+  push()
+  let crater1X = map(song.currentTime(), bridge, bridge+20, 1200, -17000);
+  let crater1Y = map(song.currentTime(), bridge, bridge+20, 950, 1000);
+  let crater1Scale = map(song.currentTime(), bridge, bridge+20, 0.3, 4);
+    push()
+    translate(300);
+    imageMode(CENTER);
+    scale(crater1Scale);
+    image(craterImg, crater1X, crater1Y);
+    pop()
+    pop()
+pop(
+  pop()
+)
 
 }
 
@@ -1282,6 +1781,19 @@ strokeWeight(roadLine2WeightSize)
 if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
 (song.currentTime() > chorus2)){
   
+        //heart glowing
+push()
+let glowOpacity = map(other, 0, 100, -200, 100)
+let glowScale = map(bass, 0, 100, 0.8, 1.1)
+noStroke()
+fill(255, 255, 255, glowOpacity)
+push()
+scale(glowScale);
+ellipse((width/2)/glowScale, (height/2-190)/glowScale, 390, 350);
+pop()
+pop()
+
+//heart
   heartBackScale = map(drum, 0, 100, 1, 1.2);
   heartMainScale = map(drum, 0, 100, 1, 1.5);
     push()
@@ -1297,11 +1809,21 @@ if ((song.currentTime() > chorus1 && song.currentTime() <= verse2) ||
     pop()
 }
 
+push()
+  push()
+  let crater3X = map(song.currentTime(),outro, outro+20, 1200, -17000);
+  let crater3Y = map(song.currentTime(), outro, outro+20, 950, 1000);
+  let crater3Scale = map(song.currentTime(), outro, outro+20, 0.3, 2);
+    push()
+    translate(300);
+    imageMode(CENTER);
+    scale(crater3Scale);
+    image(craterImg, crater3X, crater3Y);
+      pop()
+  pop()
+  pop()
 }
 pop()
-
-
-
 
 
 
@@ -1345,18 +1867,3 @@ endShape();
 pop();
 
 }
-
-
-
-
-// // horizon colour change with bass
-  // let yellow = color(240, 197, 5)
-  // let red = color(204, 14, 14)
-  // let lerpMap = map(bass, 0, 100, 0,1)
-  // let middleColor = lerpColor(pink, purple, lerpMap)
-  
-  // let mappedXPost = map(vocal, 0, 100, -100, 100)
-  
-  // fill(middleColor)
-  // rect(width/2, height/2+height/4, 1280, 360)
-  // ellipse(width/2, height/2, 100, 100)
